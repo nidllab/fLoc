@@ -1,4 +1,4 @@
-function runme(name, trigger, stim_set, num_runs, task_num, start_run)
+function runme(name, start_run)
 % Prompts experimenter for session parameters and executes functional
 % localizer experiment used to define regions in high-level visual cortex
 % selective to faces, places, bodies, and printed characters.
@@ -17,8 +17,8 @@ function runme(name, trigger, stim_set, num_runs, task_num, start_run)
 
 
 %% add paths and check inputs
-
-addpath('functions');
+addpath('E:\USERS\HoeftLab\HoeftLab\Desktop\FAM-2018\fLoc\functions');
+% addpath('functions');
 
 % session name
 if nargin < 1
@@ -29,36 +29,42 @@ if nargin < 1
 end
 
 % option to trigger scanner
-if nargin < 2
-    trigger = -1;
-    while ~ismember(trigger, 0:1)
-        trigger = input('Trigger scanner? (0 = no, 1 = yes) : ');
-    end
-end
+% if nargin < 2
+%     trigger = -1;
+%     while ~ismember(trigger, 0:1)
+%         trigger = input('Trigger scanner? (0 = no, 1 = yes) : ');
+%     end
+% end
+trigger=0;
 
 % which stimulus set/s to use
-if nargin < 3
-    stim_set = -1;
-    while ~ismember(stim_set, 1:3)
-        stim_set = input('Which stimulus set? (1 = standard, 2 = alternate, 3 = both) : ');
-    end
-end
+% if nargin < 3
+%     stim_set = -1;
+% %     while ~ismember(stim_set, 1:3)                                                            %lotusea
+% %         stim_set = input('Which stimulus set? (1 = standard, 2 = alternate, 3 = both) : ');   %lotusea
+%     while ~ismember(stim_set, 1:4)                                                                        %lotusea
+%         stim_set = input('Which stimulus set? (1 = standard, 2 = alternate, 3 = both, 4 = custom) : ');   %lotusea
+%     end
+% end
+stim_set = 4;
 
 % number of runs to generate
-if nargin < 4
-    num_runs = -1;
-    while ~ismember(num_runs, 1:24)
-        num_runs = input('How many runs? : ');
-    end
-end
+% if nargin < 4
+%     num_runs = -1;
+%     while ~ismember(num_runs, 1:24)
+%         num_runs = input('How many runs? : ');
+%     end
+% end
+num_runs = 2;
 
 % which task to use
-if nargin < 5
-    task_num = -1;
-    while ~ismember(task_num, 1:3)
-        task_num = input('Which task? (1 = 1-back, 2 = 2-back, 3 = oddball) : ');
-    end
-end
+% if nargin < 5
+%     task_num = -1;
+%     while ~ismember(task_num, 1:3)
+%         task_num = input('Which task? (1 = 1-back, 2 = 2-back, 3 = oddball) : ');
+%     end
+% end
+task_num = 1;
 
 % which run number to begin executing (default = 1)
 if nargin < 6

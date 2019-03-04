@@ -50,12 +50,14 @@ classdef fLocSession
             session.name = deblank(name);
             session.trigger = trigger;
             if nargin < 3
-                session.stim_set = 3;
+%                 session.stim_set = 3; %lotusea cmout
+                session.stim_set = 4; % lotusea add
             else
                 session.stim_set = stim_set;
             end
             if nargin < 4
-                session.num_runs = 4;
+%                 session.num_runs = 4; %lotusea cmout
+                session.num_runs = 2;
             else
                 session.num_runs = num_runs;
             end
@@ -158,14 +160,16 @@ classdef fLocSession
                 Screen('Flip', window_ptr);
                 DrawFormattedText(window_ptr, session.instructions, 'center', 'center', tcol);
                 Screen('Flip', window_ptr);
-                get_key('g', session.keyboard);
+%                 get_key('g', session.keyboard); % lotusea cmout
+                get_key('5', session.keyboard);   % lotusea add
             elseif session.trigger == 1
                 Screen('FillRect', window_ptr, bcol);
                 Screen('Flip', window_ptr);
                 DrawFormattedText(window_ptr, session.instructions, 'center', 'center', tcol); % 'flipHorizontal', 1);
                 Screen('Flip', window_ptr);
                 while 1
-                    get_key('g', session.keyboard);
+%                     get_key('g', session.keyboard); % lotusea cmout
+                    get_key('5', session.keyboard);  % lotusea add
                     [status, ~] = start_scan;
                     if status == 0
                         break
@@ -233,7 +237,8 @@ classdef fLocSession
             score_str = [hit_str '\n' fa_str];
             DrawFormattedText(window_ptr, score_str, 'center', 'center', tcol);
             Screen('Flip', window_ptr);
-            get_key('g', session.keyboard);
+%             get_key('g', session.keyboard); % lotusea cmout
+            get_key('5', session.keyboard); % lotusea add
             ShowCursor;
             Screen('CloseAll');
         end
@@ -262,7 +267,8 @@ classdef fLocSession
             session.parfiles = cell(1, session.num_runs);
             % list of conditions and plotting colors
             conds = ['Baseline' session.sequence.stim_conds];
-            cols = {[1 1 1] [0 0 1] [0 0 0] [1 0 0] [.8 .8 0] [0 1 0]};
+%             cols = {[1 1 1] [0 0 1] [0 0 0] [1 0 0] [.8 .8 0] [0 1 0]}; % lotusea cmout
+            cols = {[1 1 1] [0 0 1] [0 0 0] [1 0 0] [.8 .8 0] [0 1 0] [0 .8 .8]};
             % write information about each block on a separate line
             for rr = 1:session.num_runs
                 block_onsets = session.sequence.block_onsets(:, rr);
