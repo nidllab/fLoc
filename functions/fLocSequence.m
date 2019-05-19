@@ -15,7 +15,8 @@ classdef fLocSequence
     end
     
     properties (Constant)
-        stim_conds = {'Bodies' 'Characters' 'Faces' 'Objects' 'Places'};
+%         stim_conds = {'Bodies' 'Characters' 'Faces' 'Objects' 'Places'}; %lotusea rm
+        stim_conds = {'Bodies' 'Characters' 'Characters' 'Faces' 'Objects' 'Places'}; %lotusea
         stim_per_block = 12;   % number of stimuli in a block
         stim_duty_cycle = 0.5; % duration of stimulus duty cycle (s)
     end
@@ -23,6 +24,7 @@ classdef fLocSequence
     properties (Constant, Hidden)
         stim_set1 = {'body' 'word' 'adult' 'car' 'house'};
         stim_set2 = {'limb' 'number' 'child' 'instrument' 'corridor'};
+        stim_set3 = {'limb' 'realword' 'number' 'face' 'instrument' 'corridor'};   %lotusea add
         stim_per_set = 144;
         task_names = {'1back' '2back' 'oddball'};
         task_freq = 0.5;
@@ -45,12 +47,14 @@ classdef fLocSequence
         % class constructor
         function seq = fLocSequence(stim_set, num_runs, task_num)
             if nargin < 1
-                seq.stim_set = 3;
+%                 seq.stim_set = 3; % lotusea cmout
+                seq.stim_set = 4;   % lotusea add
             else
                 seq.stim_set = stim_set;
             end
             if nargin < 2
-                seq.num_runs = 4;
+%                 seq.num_runs = 4;  % lotusea cmout
+                seq.num_runs = 2;    % lotusea add (only one run)
             else
                 seq.num_runs = num_runs;
             end
@@ -104,6 +108,8 @@ classdef fLocSequence
                     cat_iters = ceil(seq.num_runs / 2);
                     run_sets = repmat(run_sets, cat_iters, 1);
                     run_sets = run_sets(1:seq.num_runs, :);
+                case 4                                                  %lotusea add
+                    run_sets = repmat(seq.stim_set3, seq.num_runs, 1);  %lotusea add
                 otherwise
                     error('Invalid stim_set argument.');
             end
