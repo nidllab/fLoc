@@ -1,6 +1,9 @@
 
 # FLoc Task Protocol
 
+
+# Installation
+
 ### Important Notes
 
 - Opens in MATLAB
@@ -28,11 +31,11 @@
 
 #### To Run:
 
-File: Documents/Experiments/FamilyStudy/ __runme_fLoc.m__
-
-1. Click green arrow icon at the top panel to RUN the experiment
-2. When prompted, enter participant's ID
-3. Once the task instruction screen appears, the experiment will start automatically after receiving MRI trigger
+1. Open MATLAB
+1. Type `floc` at the Matlab command window
+2. When prompted, enter subject ID
+3. When prompter, enter the run number (1 or 2)
+5. When you see the text 'Press a button when an image repeats on sequential trials', start the MRI
 
 #### Between Runs:
 

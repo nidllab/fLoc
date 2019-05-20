@@ -160,8 +160,10 @@ classdef fLocSession
                 Screen('Flip', window_ptr);
                 DrawFormattedText(window_ptr, session.instructions, 'center', 'center', tcol);
                 Screen('Flip', window_ptr);
-%                 get_key('g', session.keyboard); % lotusea cmout
                 get_key('5', session.keyboard);   % lotusea add
+                DrawFormattedText(window_ptr, 'Get Ready!', 'center', 'center', tcol);
+                get_key('5', session.keyboard);   % lotusea add
+
             elseif session.trigger == 1
                 Screen('FillRect', window_ptr, bcol);
                 Screen('Flip', window_ptr);
