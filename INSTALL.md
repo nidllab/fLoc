@@ -47,6 +47,9 @@ Note: this configuration is specific to the Matlab license, not the specific mac
     e.g. `1144620,378,uconn`
 3. Save the `floc_machine_config.csv file`
 
+## Display Notes
+
+The script is configured to run at 1024x768 with a visual angle of 10.5º.
 
 
 
