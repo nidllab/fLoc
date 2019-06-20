@@ -6,6 +6,8 @@ function [w, center] = doScreen
 % open window and find center
 S = Screen('Screens');
 screen_num = max(S);
+% fix resolution for UCSF
+SetResolution(screen_num, 1024, 768, 60);
 [w, rect] = Screen('OpenWindow', screen_num);
 center = rect(3:4) / 2;
 
