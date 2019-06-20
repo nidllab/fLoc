@@ -8,6 +8,7 @@ classdef fLocSession
         sequence  % session fLocSequence object
         responses % behavioral response data structure
         parfiles  % paths to vistasoft-compatible parfiles
+        stim_size = 768;
     end
     
     properties (Hidden)
@@ -21,7 +22,6 @@ classdef fLocSession
     
     properties (Constant)
         count_down = 12; % pre-experiment countdown (secs)
-        stim_size = 768; % size to display images in pixels
     end
     
     properties (Constant, Hidden)
@@ -69,6 +69,19 @@ classdef fLocSession
             session.date = date;
             session.hit_cnt = zeros(1, session.num_runs);
             session.fa_cnt = zeros(1, session.num_runs);
+
+            % site specific size setup
+            fid=fopen('floc_machine_config.csv');
+            text=fscanf(fid,'%c');
+            lines=textscan(text,'%[^\n]','delimiter','\n');
+            for nline=2:length(lines{1,1})
+                sep_line=strsplit(lines{1,1}{nline,1},',');
+                if strcmp(sep_line{1},license)
+                    session.stim_size=str2num(sep_line{2});
+                end
+            end
+            fclose(fid);
+
         end
         
         % get session-specific id string
@@ -187,7 +200,7 @@ classdef fLocSession
             cnt = session.count_down;
             while rem_time > 0
                 if floor(rem_time) <= cnt
-                    DrawFormattedText(window_ptr, num2str(cnt), 'center', 'center', tcol);
+                    % DrawFormattedText(window_ptr, num2str(cnt), 'center', 'center', tcol);
                     Screen('Flip', window_ptr);
                     cnt = cnt - 1;
                 end
@@ -228,19 +241,10 @@ classdef fLocSession
             save(fpath, 'resp_keys', 'resp_press', '-v7.3');
             % analyze response data and display performance
             session = score_task(session, run_num);
-            num_probes = num2str(sum(session.sequence.task_probes(:, run_num)));
-            hit_cnt = num2str(session.hit_cnt(run_num));
-            fa_cnt = num2str(session.fa_cnt(run_num));
-            hit_rate = num2str(session.hit_rate(run_num) * 100);
-            hit_str = ['Hits: ' hit_cnt '/' num_probes ' (' hit_rate '%)'];
-            fa_str = ['False alarms: ' fa_cnt];
             Screen('FillRect', window_ptr, bcol);
             Screen('Flip', window_ptr);
-            score_str = [hit_str '\n' fa_str];
-            DrawFormattedText(window_ptr, score_str, 'center', 'center', tcol);
             Screen('Flip', window_ptr);
-%             get_key('g', session.keyboard); % lotusea cmout
-            get_key('5', session.keyboard); % lotusea add
+            get_key('q', session.keyboard);
             ShowCursor;
             Screen('CloseAll');
         end
