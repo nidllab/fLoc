@@ -1,4 +1,4 @@
-function floc(name, start_run)
+function famfloc(name, start_run)
 % Prompts experimenter for session parameters and executes functional
 % localizer experiment used to define regions in high-level visual cortex
 % selective to faces, places, bodies, and printed characters.
