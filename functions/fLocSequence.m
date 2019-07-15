@@ -16,7 +16,7 @@ classdef fLocSequence
     
     properties (Constant)
 %         stim_conds = {'Bodies' 'Characters' 'Faces' 'Objects' 'Places'}; %lotusea rm
-        stim_conds = {'Bodies' 'Characters' 'Characters' 'Faces' 'Objects' 'Places'}; %lotusea
+        stim_conds = {'Bodies' 'Words' 'Numbers' 'Faces' 'Objects' 'Places'}; %FB
         stim_per_block = 12;   % number of stimuli in a block
         stim_duty_cycle = 0.5; % duration of stimulus duty cycle (s)
     end

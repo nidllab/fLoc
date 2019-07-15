@@ -8,7 +8,6 @@ classdef fLocSession
         sequence  % session fLocSequence object
         responses % behavioral response data structure
         parfiles  % paths to vistasoft-compatible parfiles
-        stim_size = 768;
     end
     
     properties (Hidden)
@@ -21,7 +20,8 @@ classdef fLocSession
     end
     
     properties (Constant)
-        count_down = 12; % pre-experiment countdown (secs)
+        count_down = 0; % pre-experiment countdown (secs) % FB modified from 12 to 0
+        stim_size = 768; % size to display images in pixels
     end
     
     properties (Constant, Hidden)
@@ -30,7 +30,7 @@ classdef fLocSession
         fix_color = [255 0 0]; % fixation marker color (RGB)
         text_color = 255;      % instruction text color (grayscale)
         blank_color = 128;     % baseline screen color (grayscale)
-        wait_dur = 1;          % seconds to wait for response
+        wait_dur = 1.5;          % seconds to wait for response .  %% FB changed from 1 to 1.5 (allowed window for response after repeat)
     end
     
     properties (Dependent)
@@ -195,19 +195,30 @@ classdef fLocSession
                     end
                 end
             end
-            % display countdown numbers
-            [cnt_time, rem_time] = deal(session.count_down + GetSecs);
-            cnt = session.count_down;
-            while rem_time > 0
-                if floor(rem_time) <= cnt
-                    % DrawFormattedText(window_ptr, num2str(cnt), 'center', 'center', tcol);
-                    Screen('Flip', window_ptr);
-                    cnt = cnt - 1;
-                end
-                rem_time = cnt_time - GetSecs;
-            end
+            
+            Screen('FillRect', window_ptr, bcol);
+            draw_fixation(window_ptr, center, fcol);
+            Screen('Flip', window_ptr);
+            
+            start_time = GetSecs; % added by FB, intially at the beginning of the main loop
+            
+            % WaitSecs(10); % 10 s of rest instead of the countdown 
+            % if this is modified, the values in write_parfiles also have
+            % to be
+%             % display countdown numbers %FB cmout
+%             [cnt_time, rem_time] = deal(session.count_down + GetSecs);
+%             cnt = session.count_down;
+%             while rem_time > 0
+%                 if floor(rem_time) <= cnt
+%                     DrawFormattedText(window_ptr, num2str(cnt), 'center', 'center', tcol);
+%                     Screen('Flip', window_ptr);
+%                     cnt = cnt - 1;
+%                 end
+%                 rem_time = cnt_time - GetSecs;
+%             end
+            
             % main display loop
-            start_time = GetSecs;
+            % start_time = GetSecs;
             for ii = 1:length(stim_names)
                 % display blank screen if baseline and image if stimulus
                 if strcmp(stim_names{ii}, 'baseline')
@@ -220,7 +231,7 @@ classdef fLocSession
                 Screen('Flip', window_ptr);
                 % collect responses
                 ii_press = []; ii_keys = [];
-                [keys, ie] = record_keys(start_time + (ii - 1) * sdc, stim_dur, k);
+                [keys, ie] = record_keys(start_time + (ii - 1) * sdc, stim_dur, k); % FB modified record_keys to ignore TTL '5'
                 ii_keys = [ii_keys keys]; ii_press = [ii_press ie];
                 % display ISI if necessary
                 if isi_dur > 0
@@ -231,7 +242,7 @@ classdef fLocSession
                     Screen('Flip', window_ptr);
                 end
                 resp_keys{ii} = ii_keys;
-                resp_press(ii) = min(ii_press);
+                resp_press(ii) = 1-min(ii_press); %FB changed min(ii_press) into 1-min(ii_press) so that resp_press says whether there WAS a response
             end
             % store responses
             session.responses(run_num).keys = resp_keys;
@@ -239,15 +250,27 @@ classdef fLocSession
             fname = [session.id '_backup_run' num2str(run_num) '.mat'];
             fpath = fullfile(session.exp_dir, 'data', session.id, fname);
             save(fpath, 'resp_keys', 'resp_press', '-v7.3');
-            % analyze response data and display performance
+            % analyze response data and display performance (in matlab window rather than Psychtoolbox screen)
             session = score_task(session, run_num);
-            Screen('FillRect', window_ptr, bcol);
-            Screen('Flip', window_ptr);
-            Screen('Flip', window_ptr);
-            get_key('q', session.keyboard);
+            num_probes = num2str(sum(session.sequence.task_probes(:, run_num)));
+            hit_cnt = num2str(session.hit_cnt(run_num));
+            fa_cnt = num2str(session.fa_cnt(run_num));
+            hit_rate = num2str(session.hit_rate(run_num) * 100);
+            hit_str = ['Hits: ' hit_cnt '/' num_probes ' (' hit_rate '%)'];
+            fa_str = ['False alarms: ' fa_cnt];
+%             Screen('FillRect', window_ptr, bcol);
+%             Screen('Flip', window_ptr);
+%             score_str = [hit_str '\n' fa_str];
+%             DrawFormattedText(window_ptr, score_str, 'center', 'center', tcol);
+%             Screen('Flip', window_ptr);
+            disp(hit_str);
+            disp(fa_str);
+            % get_key('g', session.keyboard); % lotusea cmout
+            % get_key('c', session.keyboard); %FB created and cmout
             ShowCursor;
             Screen('CloseAll');
         end
+        
         
         % quantify performance in stimulus task
         function session = score_task(session, run_num)
