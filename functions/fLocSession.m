@@ -170,45 +170,47 @@ classdef fLocSession
                 end
             end
             % start experiment triggering scanner if applicable
-            if session.trigger == 0
+%             if session.trigger == 0
                 Screen('FillRect', window_ptr, bcol);
                 Screen('Flip', window_ptr);
                 DrawFormattedText(window_ptr, session.instructions, 'center', 'center', tcol);
                 Screen('Flip', window_ptr);
                 get_key('5', session.keyboard);   % lotusea add
+                start_time = GetSecs; 
+                
+                % add dummy TR
                 DrawFormattedText(window_ptr, 'Get Ready!', 'center', 'center', tcol);
                 Screen('Flip', window_ptr);
                 WaitSecs(.2); % makes sure manual presses of 5s don't get registered twice
-                get_key('5', session.keyboard);   % dummy TR
+                get_key('5', session.keyboard);   
 
-            elseif session.trigger == 1
-                Screen('FillRect', window_ptr, bcol);
-                Screen('Flip', window_ptr);
-                DrawFormattedText(window_ptr, session.instructions, 'center', 'center', tcol); % 'flipHorizontal', 1);
-                Screen('Flip', window_ptr);
-                while 1
-%                     get_key('g', session.keyboard); % lotusea cmout
-                    get_key('5', session.keyboard);  % lotusea add
-                    [status, ~] = start_scan;
-                    if status == 0
-                        break
-                    else
-                        message = 'Trigger failed.';
-                        DrawFormattedText(window_ptr, message, 'center', 'center', fcol);
-                        Screen('Flip', window_ptr);
-                    end
-                end
-            end
+
+%             elseif session.trigger == 1
+%                 Screen('FillRect', window_ptr, bcol);
+%                 Screen('Flip', window_ptr);
+%                 DrawFormattedText(window_ptr, session.instructions, 'center', 'center', tcol); % 'flipHorizontal', 1);
+%                 Screen('Flip', window_ptr);
+%                 while 1
+% %                     get_key('g', session.keyboard); % lotusea cmout
+%                     get_key('5', session.keyboard);  % lotusea add
+%                     [status, ~] = start_scan;
+%                     if status == 0
+%                         break
+%                     else
+%                         message = 'Trigger failed.';
+%                         DrawFormattedText(window_ptr, message, 'center', 'center', fcol);
+%                         Screen('Flip', window_ptr);
+%                     end
+%                 end
+%             end
             
             Screen('FillRect', window_ptr, bcol);
             draw_fixation(window_ptr, center, fcol);
             Screen('Flip', window_ptr);
-            
-            start_time = GetSecs; % added by FB, intially at the beginning of the main loop
-            
+                        
             % if this is modified, the values in write_parfiles also have
             % to be
-            % display countdown numbers %FB cmout
+            % display countdown numbers
             [cnt_time, rem_time] = deal(session.count_down + GetSecs);
             cnt = session.count_down;
             while rem_time > 0
