@@ -8,6 +8,7 @@ classdef fLocSession
         sequence  % session fLocSequence object
         responses % behavioral response data structure
         parfiles  % paths to vistasoft-compatible parfiles
+        stim_size = 768; % size to display images in pixels % over-ridden below in session.stim_size
     end
     
     properties (Hidden)
@@ -21,7 +22,6 @@ classdef fLocSession
     
     properties (Constant)
         count_down = 0; % pre-experiment countdown (secs) % FB modified from 12 to 0
-        stim_size = 768; % size to display images in pixels
     end
     
     properties (Constant, Hidden)
@@ -155,6 +155,8 @@ classdef fLocSession
             resp_keys = {}; resp_press = zeros(length(stim_names), 1);
             % setup screen and load all stimuli in run
             [window_ptr, center] = do_screen;
+            Screen('FillRect', window_ptr, bcol); % display grey background
+            Screen('Flip', window_ptr);
             center_x = center(1); center_y = center(2); s = session.stim_size / 2;
             stim_rect = [center_x - s center_y - s center_x + s center_y + s];
             img_ptrs = [];
@@ -175,7 +177,9 @@ classdef fLocSession
                 Screen('Flip', window_ptr);
                 get_key('5', session.keyboard);   % lotusea add
                 DrawFormattedText(window_ptr, 'Get Ready!', 'center', 'center', tcol);
-                get_key('5', session.keyboard);   % lotusea add
+                Screen('Flip', window_ptr);
+                WaitSecs(.2); % makes sure manual presses of 5s don't get registered twice
+                get_key('5', session.keyboard);   % dummy TR
 
             elseif session.trigger == 1
                 Screen('FillRect', window_ptr, bcol);
@@ -202,20 +206,19 @@ classdef fLocSession
             
             start_time = GetSecs; % added by FB, intially at the beginning of the main loop
             
-            % WaitSecs(10); % 10 s of rest instead of the countdown 
             % if this is modified, the values in write_parfiles also have
             % to be
-%             % display countdown numbers %FB cmout
-%             [cnt_time, rem_time] = deal(session.count_down + GetSecs);
-%             cnt = session.count_down;
-%             while rem_time > 0
-%                 if floor(rem_time) <= cnt
-%                     DrawFormattedText(window_ptr, num2str(cnt), 'center', 'center', tcol);
-%                     Screen('Flip', window_ptr);
-%                     cnt = cnt - 1;
-%                 end
-%                 rem_time = cnt_time - GetSecs;
-%             end
+            % display countdown numbers %FB cmout
+            [cnt_time, rem_time] = deal(session.count_down + GetSecs);
+            cnt = session.count_down;
+            while rem_time > 0
+                if floor(rem_time) <= cnt
+                    DrawFormattedText(window_ptr, num2str(cnt), 'center', 'center', tcol);
+                    Screen('Flip', window_ptr);
+                    cnt = cnt - 1;
+                end
+                rem_time = cnt_time - GetSecs;
+            end
             
             % main display loop
             % start_time = GetSecs;

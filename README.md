@@ -12,7 +12,7 @@ Version: $Id:$ $Format:%cd by %aN$
 
 ## Emergency quit:
 
-- in case of emergency, quit experiment by pressing `q` on your keyboard to quit
+- in case of emergency, quit experiment by typing @ (does not save)
 - if the screen is frozen, type `sca` and then the `return` key
 - If that does not work, press `ctrl-c`. Then `alt+tab` and close the psychtoolbox window
 

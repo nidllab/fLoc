@@ -16,7 +16,7 @@ for nn = 1:length(d)
     end
 end
 if k == 0
-    fprintf('\nKeyboard not found.\n');
+    % fprintf('\nKeyboard not found.\n');
 end
 
 end
