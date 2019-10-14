@@ -69,10 +69,11 @@ task_num = 1;
 
 % which run number to begin executing (default = 1)
 if nargin < 2
-        start_run = [];
-    while isempty(deblank(start_run))
-        start_run = str2num(input('Run : ', 's'));
+    start_run_string = [];
+    while isempty(deblank(start_run_string))
+        start_run_string = input('Run : ', 's');
     end
+    start_run=str2num(start_run_string);
 end
 
 

@@ -14,7 +14,7 @@ for nn = 1:length(d)
     end
 end
 if b == 0
-    fprintf('\nButton box not found.\n');
+    % fprintf('\nButton box not found.\n');
 end
 
 end
